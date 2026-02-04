@@ -6,6 +6,7 @@ public class Event
     public int Id { get; private set; }
     public string Name { get; private set; } = string.Empty;
     public string Description { get; private set; } = string.Empty;
+    public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
     public DateTime StartDateTime { get; private set; }
     public DateTime EndDateTime { get; private set; }
     public string Location { get; private set; } = string.Empty;
