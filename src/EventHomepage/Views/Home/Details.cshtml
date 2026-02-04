@@ -1,0 +1,144 @@
+@model EventHomepage.ViewModels.EventDetailsViewModel
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="container my-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Events</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+        </ol>
+    </nav>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h1 class="card-title mb-4">@Model.Name</h1>
+                    
+                    <div class="mb-3">
+                        <h5>Description</h5>
+                        <p>@Model.Description</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <h6><i class="bi bi-calendar-event"></i> Start Time</h6>
+                            <p>@Model.StartDateTime.ToString("f")</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <h6><i class="bi bi-calendar-check"></i> End Time</h6>
+                            <p>@Model.EndDateTime.ToString("f")</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <h6><i class="bi bi-geo-alt"></i> Location</h6>
+                        <p>@Model.Location</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h6><i class="bi bi-people"></i> Capacity</h6>
+                        @if (Model.MaxParticipants.HasValue)
+                        {
+                            <div class="d-flex align-items-center">
+                                <div class="progress flex-grow-1 me-3" style="height: 25px;">
+                                    @{
+                                        var percentage = Model.MaxParticipants.Value > 0 
+                                            ? (Model.RegistrationCount * 100.0 / Model.MaxParticipants.Value) 
+                                            : 0;
+                                        var progressClass = percentage >= 100 ? "bg-danger" : percentage >= 80 ? "bg-warning" : "bg-success";
+                                    }
+                                    <div class="progress-bar @progressClass" role="progressbar" 
+                                         style="width: @percentage%" 
+                                         aria-valuenow="@Model.RegistrationCount" 
+                                         aria-valuemin="0" 
+                                         aria-valuemax="@Model.MaxParticipants">
+                                        @Model.RegistrationCount / @Model.MaxParticipants
+                                    </div>
+                                </div>
+                                @if (Model.IsFull)
+                                {
+                                    <span class="badge bg-danger">Full</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">@(Model.MaxParticipants - Model.RegistrationCount) spots left</span>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p>@Model.RegistrationCount participants registered (unlimited capacity)</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            @if (Model.IsFull)
+            {
+                <div class="card bg-light">
+                    <div class="card-body text-center">
+                        <i class="bi bi-x-circle text-danger" style="font-size: 3rem;"></i>
+                        <h5 class="card-title mt-3">Event is Full</h5>
+                        <p class="card-text">Unfortunately, this event has reached maximum capacity.</p>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bi bi-pencil-square"></i> Register for Event</h5>
+                        
+                        @if (ViewData.ModelState != null && !ViewData.ModelState.IsValid)
+                        {
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                    {
+                                        <li>@error.ErrorMessage</li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+
+                        <form asp-action="Register" asp-route-id="@Model.Id" method="post">
+                            <div class="mb-3">
+                                <label for="ParticipantName" class="form-label">Full Name</label>
+                                <input name="ParticipantName" id="ParticipantName" value="@Model.Registration.ParticipantName" class="form-control" placeholder="Enter your full name" />
+                                <span class="text-danger field-validation-valid" data-valmsg-for="ParticipantName" data-valmsg-replace="true"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="ParticipantEmail" class="form-label">Email Address</label>
+                                <input name="ParticipantEmail" id="ParticipantEmail" value="@Model.Registration.ParticipantEmail" class="form-control" type="email" placeholder="Enter your email" />
+                                <span class="text-danger field-validation-valid" data-valmsg-for="ParticipantEmail" data-valmsg-replace="true"></span>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-check-circle"></i> Register Now
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

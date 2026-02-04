@@ -1,0 +1,67 @@
+﻿@model List<EventHomepage.ViewModels.EventListViewModel>
+
+@{
+    ViewData["Title"] = "Events";
+}
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Upcoming Events</h1>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            <p class="mb-0">No events available at the moment. Check back later!</p>
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var evt in Model)
+            {
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">@evt.Name</h5>
+                            <p class="card-text">
+                                <i class="bi bi-calendar-event"></i>
+                                <strong>Start:</strong> @evt.StartDateTime.ToString("g")<br />
+                                <i class="bi bi-calendar-check"></i>
+                                <strong>End:</strong> @evt.EndDateTime.ToString("g")<br />
+                                <i class="bi bi-geo-alt"></i>
+                                <strong>Location:</strong> @evt.Location
+                            </p>
+                            @if (evt.MaxParticipants.HasValue)
+                            {
+                                <p class="card-text">
+                                    <i class="bi bi-people"></i>
+                                    <strong>Participants:</strong> @evt.RegistrationCount / @evt.MaxParticipants
+                                    @if (evt.IsFull)
+                                    {
+                                        <span class="badge bg-danger ms-2">Full</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success ms-2">Available</span>
+                                    }
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="card-text">
+                                    <i class="bi bi-people"></i>
+                                    <strong>Participants:</strong> @evt.RegistrationCount
+                                    <span class="badge bg-success ms-2">Open</span>
+                                </p>
+                            }
+                        </div>
+                        <div class="card-footer">
+                            <a asp-action="Details" asp-route-id="@evt.Id" class="btn btn-primary w-100">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

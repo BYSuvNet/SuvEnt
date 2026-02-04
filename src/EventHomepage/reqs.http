@@ -1,0 +1,25 @@
+POST http://localhost:6767/api/events
+Content-Type: application/json
+
+{
+  "Name": "Vi kollar på hockey!",
+  "StartDateTime": "2026-07-01T10:00:00",
+  "EndDateTime": "2026-07-01T13:00:00",
+  "Location": "Makerspace",
+  "Description": "Vi kollar på hockey tillsammans och hejar fram vårt lag. Vi äter också pizza och dricker läsk. Ta med ditt bästa humör!",
+  "MaxParticipants": 15
+}
+
+###
+
+POST http://localhost:6767/api/events
+Content-Type: application/json
+
+{
+  "Name": "Jag chillar!",
+  "StartDateTime": "2026-07-01T10:00:00",
+  "EndDateTime": "2026-07-01T13:00:00",
+  "Location": "Vardagsrummet",
+  "Description": "Jag ska hänga. Med mig själv. Kom inte.",
+  "MaxParticipants": 1
+}
