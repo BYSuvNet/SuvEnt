@@ -1,16 +1,27 @@
 using System.Diagnostics;
 using EventHomepage.Models;
-using EventCore.Entities;
+using EventInfrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventHomepage.Controllers;
 
 public class HomeController : Controller
 {
-    
-    public IActionResult Index()
+    private readonly EventDbContext _context;
+
+    public HomeController(EventDbContext context)
     {
-        return View();
+        _context = context;
+    }
+    
+    // gör om till asynkronsk för att läsa in från DB
+    public async Task<IActionResult> Index()
+    {
+        // hämta events 
+        var allEvents = await _context.Events.ToListAsync();
+        return View(allEvents);
+        
     }
 
     public IActionResult Privacy()
