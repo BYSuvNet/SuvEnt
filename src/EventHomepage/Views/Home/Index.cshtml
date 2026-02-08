@@ -2,12 +2,69 @@
     ViewData["Title"] = "Home Page";
 }
 
+@model List<EventCore.Entities.Event>
+
 <div class="text-center">
     <h2 class="display-4">Suvnet's Finest Event Manager</h2>
 </div>
 
-<h2>Event list</h2>
-
-
+<div class="container mt-5">
+    <h2>Event List</h2>
+    
+    @if (Model?.Any() == true)
+    {
+        <div class="row">
+            @foreach (var ev in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">@ev.Name</h5>
+                            <p class="card-text text-muted">@ev.Description</p>
+                            
+                            <div class="mb-2">
+                                <i class="bi bi-calendar-event"></i>
+                                <strong>Event Start:</strong> @ev.StartDateTime.ToString("yyyy-MM-dd HH:mm")
+                            </div>
+                            
+                            <div class="mb-2">
+                                <i class="bi bi-clock"></i>
+                                <strong>Event Stop:</strong> @ev.EndDateTime.ToString("yyyy-MM-dd HH:mm")
+                            </div>
+                            
+                            <div class="mb-2">
+                                <i class="bi bi-geo-alt"></i>
+                                <strong>Location:</strong> @ev.Location
+                            </div>
+                            
+                            @if (ev.MaxParticipants.HasValue)
+                            {
+                                <div class="mb-2">
+                                    <i class="bi bi-people"></i>
+                                    <strong>Max Participants:</strong> @ev.MaxParticipants
+                                </div>
+                            }
+                            
+                            <div class="text-muted small">
+                                <i class="bi bi-clock-history"></i>
+                                Created: @ev.CreatedAt.ToString("yyyy-MM-dd HH:mm")
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            }
+            
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i>
+            No events found. Create one here.
+        </div>
+    }
+    
+</div>
 
 
