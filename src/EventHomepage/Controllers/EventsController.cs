@@ -35,7 +35,7 @@ public class EventsController : ControllerBase
         if (dto.EndDateTime <= dto.StartDateTime)
             return BadRequest("EndDateTime must be after StartDateTime");
             
-        // skapa nytt Event via domänkonstruktorn
+        // skapa nytt Event via domänkonstruktorn, eftersom Event är min domänmodell
         var newEvent = new Event(
             dto.Name,
             dto.Description,
@@ -48,8 +48,29 @@ public class EventsController : ControllerBase
         _context.Events.Add(newEvent);
         await _context.SaveChangesAsync();
         
-        // returnera statuskod 201 Created
-        return Created($"/api/events/{newEvent.Id}", new {newEvent.Id, newEvent.Name});
+        // skapa ett DTO som returneras till klienten, CreateEventDTO är bara ren data som serialiseras till JASON
+        var dtoResponse = new CreateEventDTO(
+            
+            newEvent.Name,
+            newEvent.Description,
+            newEvent.StartDateTime,
+            newEvent.EndDateTime,
+            newEvent.Location,
+            newEvent.MaxParticipants
+            
+        );
+        
+        // returnera statuskod 201 Created tillsammans med hela eventet
+        return Created($"/api/events/{newEvent.Id}", dtoResponse);
+    }
+    
+    [HttpGet] // GET: hämta ALLA events
+    public async Task<IActionResult> GetAllEvents()
+    {
+        var allEvents = await _context.Events.Include(e => e.Registrations)
+        .ToListAsync();
+        
+        return Ok(allEvents);
     }
     
     
