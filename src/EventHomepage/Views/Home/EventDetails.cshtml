@@ -1,0 +1,98 @@
+@model EventHomepage.Models.EventDetailsViewModel
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h1>@Model.Name</h1>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Event Information</h5>
+
+                    <div class="mb-3">
+                        <i class="bi bi-calendar-event"></i>
+                        <strong>Start:</strong> @Model.StartDateTime.ToString("yyyy-MM-dd HH:mm")
+                    </div>
+
+                    <div class="mb-3">
+                        <i class="bi bi-clock"></i>
+                        <strong>End:</strong> @Model.EndDateTime.ToString("yyyy-MM-dd HH:mm")
+                    </div>
+
+                    <div class="mb-3">
+                        <i class="bi bi-geo-alt"></i>
+                        <strong>Location:</strong> @Model.Location
+                    </div>
+
+                    @if (Model.MaxParticipants.HasValue)
+                    {
+                        <div class="mb-3">
+                            <i class="bi bi-people"></i>
+                            <strong>Participants:</strong>
+                            @Model.ParticipantCount / @Model.MaxParticipants
+                            <span class="badge bg-@(Model.IsFull ? "danger" : "success") ms-2">
+                                @(Model.IsFull ? "FULL" : "Available")
+                            </span>
+                        </div>
+                    }
+
+                    <div class="mb-3">
+                        <i class="bi bi-clock-history"></i>
+                        <strong>Created:</strong> @Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Description</h5>
+                    <p class="card-text">@Model.Description</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            @if (!Model.IsFull)
+            {
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Register for this event</h5>
+
+                        <form asp-controller="Home" asp-action="Register" asp-route-id="@Model.Id" method="post">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="name" name="Name" required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="Email" required />
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="bi bi-check-circle"></i> Register
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger">
+                    <i class="bi bi-x-circle"></i>
+                    <strong>Sorry!</strong> This event is full.
+                </div>
+            }
+
+            <div class="mt-3">
+                <a asp-action="Index" class="btn btn-secondary w-100">
+                    <i class="bi bi-arrow-left"></i> Back to Events
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
