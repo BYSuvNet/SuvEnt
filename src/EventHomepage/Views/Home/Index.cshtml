@@ -10,7 +10,7 @@
 
 <div class="container mt-5">
     <h2>Event List</h2>
-    
+
     @if (Model?.Any() == true)
     {
         <div class="row">
@@ -21,22 +21,22 @@
                         <div class="card-body">
                             <h5 class="card-title">@ev.Name</h5>
                             <p class="card-text text-muted">@ev.Description</p>
-                            
+
                             <div class="mb-2">
                                 <i class="bi bi-calendar-event"></i>
                                 <strong>Event Start:</strong> @ev.StartDateTime.ToString("yyyy-MM-dd HH:mm")
                             </div>
-                            
+
                             <div class="mb-2">
                                 <i class="bi bi-clock"></i>
                                 <strong>Event Stop:</strong> @ev.EndDateTime.ToString("yyyy-MM-dd HH:mm")
                             </div>
-                            
+
                             <div class="mb-2">
                                 <i class="bi bi-geo-alt"></i>
                                 <strong>Location:</strong> @ev.Location
                             </div>
-                            
+
                             @if (ev.MaxParticipants.HasValue)
                             {
                                 <div class="mb-2">
@@ -44,17 +44,22 @@
                                     <strong>Max Participants:</strong> @ev.MaxParticipants
                                 </div>
                             }
-                            
+
                             <div class="text-muted small">
                                 <i class="bi bi-clock-history"></i>
                                 Created: @ev.CreatedAt.ToString("yyyy-MM-dd HH:mm")
                             </div>
+
+                            <div class="text-center mt-4">
+                                <a asp-controller="Home" asp-action="EventDetails" asp-route-id="@ev.Id" class="btn btn-primary">
+                                    <i class="bi bi-eye"></i> View Event Details
+                                </a>
+                            </div>
                         </div>
                     </div>
-                    
                 </div>
             }
-            
+
         </div>
     }
     else
@@ -64,12 +69,10 @@
             No events found.
         </div>
     }
-    
-    <div class="text-center mt-4">
+
+    <div class="text-left mt-4">
         <a asp-controller="Create" class="btn btn-primary btn-lg">
             <i class="bi bi-plus-circle"></i> Create new event
         </a>
     </div>
 </div>
-
-
