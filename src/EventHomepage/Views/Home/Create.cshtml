@@ -1,0 +1,48 @@
+@model EventHomepage.Models.CreateEventViewModel
+
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+<h2>Create new event</h2>
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Event Name</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Description</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <label asp-for="StartDateTime" class="form-label">Start</label>
+            <input asp-for="StartDateTime" type="datetime-local" class="form-control" />
+            <span asp-validation-for="StartDateTime" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="EndDateTime" class="form-label">End</label>
+            <input asp-for="EndDateTime" type="datetime-local" class="form-control" />
+            <span asp-validation-for="EndDateTime" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Location" class="form-label">Location</label>
+        <input asp-for="Location" class="form-control" />
+        <span asp-validation-for="Location" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="MaxParticipants" class="form-label">Max Participants (optional)</label>
+        <input asp-for="MaxParticipants" type="number" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Event</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
