@@ -8,7 +8,7 @@ builder.Services.AddControllersWithViews().AddJsonOptions(options =>
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddDbContext<EventDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite("Data Source=eventdatabase.db"));
 
 var app = builder.Build();
 
